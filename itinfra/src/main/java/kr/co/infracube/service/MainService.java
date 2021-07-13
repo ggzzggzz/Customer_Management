@@ -40,4 +40,7 @@ public class MainService {
 	public int updateAdmin(AdminDto dto) throws Exception{
 		return mainmapper.updateAdmin(dto);
 	}
+	public int updateCustomer(CustomerDto dto) throws Exception{
+		return mainmapper.updateCustomer(dto);
+	}
 }

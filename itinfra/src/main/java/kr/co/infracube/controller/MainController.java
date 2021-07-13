@@ -102,6 +102,14 @@ public class MainController {
 		return customer(request);
 	}
 	
+	//updateCustomer.do
+	@RequestMapping("/updateCustomer.do")
+	public ModelAndView updateCustomer(CustomerDto dto, HttpServletRequest request) throws Exception{
+		mainservice.updateCustomer(dto);
+		System.out.println(dto);
+		return customer(request);
+	}
+	
 	//납품
 	@RequestMapping("/delivery.do")
 	public ModelAndView delivery(HttpServletRequest request) {
@@ -157,7 +165,7 @@ public class MainController {
 	@RequestMapping("/updateAdmin.do")
 	public ModelAndView updateAdmin(AdminDto dto, HttpServletRequest request) throws Exception{
 		mainservice.updateAdmin(dto);
-		System.out.println(dto);
+		System.out.println(dto.getEmail());
 		return systemset(request);
 	}
 }

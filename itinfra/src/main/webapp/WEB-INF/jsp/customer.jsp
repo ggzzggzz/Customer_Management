@@ -116,6 +116,7 @@
   </div>
  </form>
   <!-- 수정하기::등록하기 폼과 같음(타이틀&버튼명만 다름) -->
+ <form class="customer-insert" action="updateCustomer.do" method="post">
   <div class="modalz" id="recode">
     <div class="modalz_body small">
       <div class="modalz_tit">
@@ -128,58 +129,60 @@
             <tr>
               <th class="th">고객코드</th>
               <td>
-                <input type="text" class="input" placeholder="입력하기" value="" readonly>
+                <input id="customer_code-result"type="text" class="input" placeholder="입력하기" value="" name="Customer_Code"readonly>
               </td>
             </tr>
             <tr>
               <th class="th">고객명</th>
               <td>
-                <input type="text" class="input" placeholder="입력하기" value="">
+                <input id="customer_name-result" type="text" class="input" placeholder="입력하기" value="" name="Customer_Name">
               </td>
             </tr>
             <tr>
               <th class="th">담당자명</th>
               <td>
-                <input type="text" class="input" placeholder="입력하기" value="">
+                <input id="manager_name-result" type="text" class="input" placeholder="입력하기" value="" name="Manager_Name">
               </td>
             </tr>
             <tr>
               <th class="th">담당자연락처</th>
               <td>
-                <input type="text" class="input" placeholder="입력하기" value="">
+                <input id="manager_phone-result" type="text" class="input" placeholder="입력하기" value="" name="Manager_Phone">
               </td>
             </tr>
             <tr>
               <th class="th">담당자이메일</th>
               <td>
-                <input type="text" class="input" placeholder="입력하기" value="">
+                <input id="manager_email-result" type="text" class="input" placeholder="입력하기" value="" name="Manager_Email">
               </td>
             </tr>
             <tr>
               <th class="th">메모</th>
               <td>
-                <input type="text" class="input" placeholder="입력하기" value="">
+                <input id="note-result" type="text" class="input" placeholder="입력하기" value="" name="Note">
               </td>
             </tr>
             <tr>
               <th class="th">사용유무</th>
               <td>
-                <select class="input">
-                  <option>사용</option>
-                  <option>사용안함</option>
+                <select id="use_yn-result" class="input" name="Use_YN">
+                  <option value="Y">사용</option>
+                  <option value="N">사용안함</option>
                 </select>
               </td>
             </tr>
           </table>
+          <input type="hidden" value="${sessionName}" name="Update_Code">
         </div>
       </div>
       <div class="modalz_foot">
-        <a href="#" class="newbtns bg1">수정</a>
-        <a href="#" class="newbtns modalclose">취소</a>
+        <button class="newbtns bg1" type="submit">수정</button>
+        <button class="newbtns modalclose" type="reset">취소</button>
       </div>
     </div>
     <div class="dim"></div>
   </div>
+ </form>
   <!-- alert modals:E -->
   <!-- Sidebar -->
   <div class="sidebar">
@@ -390,6 +393,45 @@
       $("#eDatePic").datepicker().datepicker("setDate", new Date());
     });
 
+  </script>
+  <script>
+	// 테이블의 Row 클릭시 값 가져오기
+	$("#examples tr").click(function(){ 	
+
+		var str = ""
+		var tdArr = new Array();	// 배열 선언
+		
+		// 현재 클릭된 Row(<tr>)
+		var tr = $(this);
+		var td = tr.children();
+		
+		// tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
+		console.log("클릭한 Row의 모든 데이터 : "+tr.text());
+		
+		// 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
+		td.each(function(i){
+			tdArr.push(td.eq(i).text());
+		});
+		
+		console.log("배열에 담긴 값 : "+tdArr);
+		
+		// td.eq(index)를 통해 값을 가져올 수도 있다.
+		var customer_code = td.eq(1).text();
+		var customer_name = td.eq(2).text();
+		var manager_name = td.eq(3).text();
+		var manager_phone = td.eq(4).text();
+		var manager_email = td.eq(5).text();
+		var note = td.eq(6).text();
+		var use_yn = td.eq(7).text();
+		
+		$("#customer_code-result").val(customer_code);
+		$("#customer_name-result").val(customer_name);
+		$("#manager_name-result").val(manager_name);
+		$("#manager_phone-result").val(manager_phone);
+		$("#manager_email-result").val(manager_email);
+		$("#note-result").val(note);
+		$("#use_yn-result").val(use_yn);
+	});
   </script>
 </body>
 </html>

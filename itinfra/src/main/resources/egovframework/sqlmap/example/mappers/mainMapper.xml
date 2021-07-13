@@ -29,7 +29,7 @@
 		SELECT Email, AName, Note, Use_YN FROM tbl_admin WHERE Email = #{Email}
 	</select>
 	<update id="updateAdmin" parameterType="kr.co.infracube.dto.AdminDto">
-		Update tbl_admin
+		UPDATE tbl_admin
 		SET 
 			Email = #{Email},
 			AName = #{AName},
@@ -39,5 +39,18 @@
 			Update_Date = current_timestamp()
 		WHERE
 			Email = #{Email}
+	</update>
+	<update id="updateCustomer"  parameterType="kr.co.infracube.dto.CustomerDto">
+		UPDATE tbl_customer
+		SET
+			Customer_Name = #{Customer_Name},
+			Manager_Name = #{Manager_Name},
+			Manager_Phone = #{Manager_Phone},
+			Manager_Email = #{Manager_Email},
+			Note = #{Note},
+			Use_YN = #{Use_YN},
+			Update_Code = #{Update_Code}
+		WHERE
+			Customer_Code = #{Customer_Code}
 	</update>
 </mapper>

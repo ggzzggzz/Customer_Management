@@ -16,4 +16,5 @@ public interface MainMapper {
 	public int insertCustomer(CustomerDto dto) throws Exception;
 	public AdminDto infoAdmin(AdminDto admin) throws Exception;
 	public int updateAdmin(AdminDto dto) throws Exception;
+	public int updateCustomer(CustomerDto dto) throws Exception;
 }
