@@ -92,13 +92,13 @@
           <tr>
             <th class="th">이메일</th>
             <td>
-              <input type="text" class="input" placeholder="입력하기" value="" name="Email">
+              <input type="text" class="input" placeholder="입력하기" value="${sessionId }" name="Email">
             </td>
           </tr>
           <tr>
             <th class="th">관리자명</th>
             <td>
-              <input type="text" class="input" placeholder="입력하기" value="" name="AName">
+              <input type="text" class="input" placeholder="입력하기" value="${sessionName }" name="AName">
             </td>
           </tr>
           <tr>
