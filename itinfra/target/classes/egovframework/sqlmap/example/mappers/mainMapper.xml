@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.infracube.mapper.MainMapper">
+	<select id="processLogin" parameterType="kr.co.infracube.dto.AdminDto" resultType="kr.co.infracube.dto.AdminDto">
+		SELECT * FROM tbl_admin WHERE Email = #{email} and Password = #{password}
+	</select>
+	<select id="listAdmins" parameterType="kr.co.infracube.dto.AdminDto" resultType="Map">
+		SELECT Email email, AName admin_name, Note note, Use_YN use_yn,
+		Insert_Admin insert_admin, Insert_Date insert_date,
+		Update_Admin update_admin, Update_Date update_date
+		FROM tbl_admin
+		WHERE AName != '슈퍼관리자'
+	</select>
+	<select id="listCustomers" parameterType="kr.co.infracube.dto.CustomerDto" resultType="Map">
+		SELECT Customer_Code customer_code, Customer_Name customer_name, Manager_Name manager_name, phoneNumber(Manager_Phone) manager_phone, 
+		Manager_Email manager_email, Note note, Use_YN use_yn, Insert_Code insert_code, 
+		Insert_Date insert_date, Update_Code update_code, Update_Date update_date
+		FROM tbl_customer
+	</select>
+	<insert id="insertAdmin" parameterType="kr.co.infracube.dto.AdminDto">
+		INSERT INTO tbl_admin(Email, AName, Note, Use_YN, Insert_Admin)
+		VALUES(#{Email}, #{AName}, #{Note}, #{Use_YN}, #{Insert_Admin})
+	</insert>
+	<insert id="insertCustomer" parameterType="kr.co.infracube.dto.CustomerDto">
+		INSERT INTO tbl_customer(Customer_Name, Manager_Name, Manager_Phone, Manager_Email, Note, Use_YN, Insert_Code)
+		VALUES(#{Customer_Name}, #{Manager_Name}, #{Manager_Phone}, #{Manager_Email}, #{Note}, #{Use_YN}, #{Insert_Code})
+	</insert>
+</mapper>
