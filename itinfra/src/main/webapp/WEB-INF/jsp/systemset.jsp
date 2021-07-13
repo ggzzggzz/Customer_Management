@@ -92,19 +92,19 @@
           <tr>
             <th class="th">이메일</th>
             <td>
-              <input type="text" class="input" placeholder="입력하기" value="${admin.Email }" name="Email">
+              <input type="text" class="input" placeholder="입력하기" value="" name="Email">
             </td>
           </tr>
           <tr>
             <th class="th">관리자명</th>
             <td>
-              <input type="text" class="input" placeholder="입력하기" value="${admin.AName }" name="AName">
+              <input type="text" class="input" placeholder="입력하기" value="" name="AName">
             </td>
           </tr>
           <tr>
             <th class="th">메모</th>
             <td>
-              <input type="text" class="input" placeholder="입력하기" value="${admin.Note }" name="Note">
+              <input type="text" class="input" placeholder="입력하기" value="" name="Note">
             </td>
           </tr>
           <tr>

@@ -155,20 +155,8 @@ public class MainController {
 	
 	//updateAdmin.do
 	@RequestMapping("/updateAdmin.do")
-	public ModelAndView updateAdmin(HttpServletRequest request) throws Exception{
-		AdminDto admin = new AdminDto();
-		HttpSession session = request.getSession();
-		admin.setEmail(session.getAttribute("sessionId").toString());
-		System.out.println(admin);
-		admin = mainservice.infoAdmin(admin);
-		System.out.println(admin);
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("admin", admin);
-		return systemset(request);
-	}
-	@RequestMapping("/processUpdateAdmin.do")
-	public ModelAndView processUpdateAdmin(AdminDto dto, HttpServletRequest request) throws Exception{
-		mainservice.processUpdateAdmin(dto);
+	public ModelAndView updateAdmin(AdminDto dto, HttpServletRequest request) throws Exception{
+		mainservice.updateAdmin(dto);
 		System.out.println(dto);
 		return systemset(request);
 	}

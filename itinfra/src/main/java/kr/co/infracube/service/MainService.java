@@ -37,7 +37,7 @@ public class MainService {
 	public AdminDto infoAdmin(AdminDto admin) throws Exception{
 		return mainmapper.infoAdmin(admin);
 	}
-	public int processUpdateAdmin(AdminDto dto) throws Exception{
-		return mainmapper.processUpdateAdmin(dto);
+	public int updateAdmin(AdminDto dto) throws Exception{
+		return mainmapper.updateAdmin(dto);
 	}
 }

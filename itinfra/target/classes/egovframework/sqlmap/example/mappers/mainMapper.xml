@@ -28,7 +28,7 @@
 	<select id="infoAdmin" parameterType="kr.co.infracube.dto.AdminDto" resultType="kr.co.infracube.dto.AdminDto">
 		SELECT Email, AName, Note, Use_YN FROM tbl_admin WHERE Email = #{Email}
 	</select>
-	<update id="processUpdateAdmin" parameterType="kr.co.infracube.dto.AdminDto">
+	<update id="updateAdmin" parameterType="kr.co.infracube.dto.AdminDto">
 		Update tbl_admin
 		SET 
 			Email = #{Email},
