@@ -79,6 +79,7 @@
 </div>
 </form>
 <!-- 수정하기::등록하기 폼과 같음(타이틀&버튼명만 다름) -->
+<form class="admin-update" action="updateAdmin.do" method="post">
 <div class="modalz" id="recode">
   <div class="modalz_body small">
     <div class="modalz_tit">
@@ -91,40 +92,42 @@
           <tr>
             <th class="th">이메일</th>
             <td>
-              <input type="text" class="input" placeholder="입력하기" value="A100">
+              <input type="text" class="input" placeholder="입력하기" value="${admin.Email }" name="Email">
             </td>
           </tr>
           <tr>
             <th class="th">관리자명</th>
             <td>
-              <input type="text" class="input" placeholder="입력하기" value="">
+              <input type="text" class="input" placeholder="입력하기" value="${admin.AName }" name="AName">
             </td>
           </tr>
           <tr>
             <th class="th">메모</th>
             <td>
-              <input type="text" class="input" placeholder="입력하기" value="">
+              <input type="text" class="input" placeholder="입력하기" value="${admin.Note }" name="Note">
             </td>
           </tr>
           <tr>
             <th class="th">사용유무</th>
             <td>
-              <select class="input">
-                <option>사용</option>
-                <option>사용안함</option>
+              <select class="input" name="Use_YN">
+                <option value="Y">사용</option>
+                <option value="N">사용안함</option>
               </select>
             </td>
           </tr>
         </table>
+        <input type="hidden" value="${sessionName}" name="Update_Admin">
       </div>
     </div>
     <div class="modalz_foot">
-      <a href="#" class="newbtns bg1">수정</a>
-      <a href="#" class="newbtns modalclose">취소</a>
+      <button class="newbtns bg1" type="submit">수정</button>
+      <button class="newbtns modalclose" type="reset">취소</button>
     </div>
   </div>
   <div class="dim"></div>
 </div>
+</form>
 
 
 
@@ -253,7 +256,7 @@
 	                      <td>${result.email}</td>
 	                      <td>${result.admin_name}</td>
 	                      <td>${result.note}</td>
-	                      <td>${result.use_yn}</td>
+	                      <td><label class="yesno yes">${result.use_yn}</label></td>
 	                      <td>${result.insert_admin}</td>
 	                      <td>${result.insert_date}</td>
 	                      <td>${result.update_admin}</td>
