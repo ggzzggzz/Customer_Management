@@ -32,9 +32,9 @@ public class MainController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	// mailSending 코드
-	@RequestMapping(value = "sendmail.do")
-	public ModelAndView mailSending(@RequestParam("email") String email, HttpServletRequest request) {
+	// sendmail 코드
+	@RequestMapping("/sendmail.do")
+	public ModelAndView sendmail(@RequestParam("email") String email, HttpServletRequest request) {
 		Random rd = new Random();
 		int number = rd.nextInt(999999);
 		String setfrom = "ggzz553@gmail.com";
