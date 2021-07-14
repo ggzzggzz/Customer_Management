@@ -63,15 +63,15 @@
 	            <div class="text-center opacity-50 font-italic">IT-Infra Management System</div>
 	          </div>
 		          <ul>
-		            <li><input type="text" class="login_input" placeholder="이메일" name="email"></li>
-		            <li><input type="password" class="login_input" placeholder="비밀번호" name="password"></li>
+		            <li><input id="email" type="text" class="login_input" placeholder="이메일" name="email"></li>
+		            <li><input id="password" type="password" class="login_input" placeholder="비밀번호" name="password"></li>
 		            <li class="line"></li>
 		            <li class="logbtn">
 		              <button class="login_btn bg1" type="submit">로그인</button>
 		            </li>
 		            <li class="line"></li>
 		            <li style="padding-left: 10px;">
-		              <input type="checkbox" class="input_check">이메일 저장
+		              <input id="emailSaved" type="checkbox" class="input_check">이메일 저장
 		              <!-- <a href="apass_reset.html" class="text-decoration-underline text-right info_a1">비밀번호 변경</a> -->
 		              <a class="text-decoration-underline text-right info_a1">비밀번호 변경</a>
 		            </li>
@@ -105,7 +105,7 @@
     	  if($('.login_input').val() == null || $('.login_input').val() == '') {
     		$('#info_a1').addClass('act');
     	  } else {
-    		  $('.info_a1').attr("href", "passwordReset.do")
+    		  $('.info_a1').attr("href", "sendmail.do?email=" + $('#email').val());
     	  }
       });
       
@@ -117,8 +117,68 @@
               //tmp.removeClass('act');
           }
       });
+     
+      $('.login_btn').click(function () {
+    	  var email_rule =  /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    	  if (!email_rule.test($('#email').val())){
+    		  alert("이메일을 형식에 맞게 입력해주세요.(예시: test@infracube.co.kr)");
+    		  return false;
+    	  }
+      });
+      
+      // 저장된 쿠키값을 가져와서 email 칸에 넣어준다. 없으면 공백으로 들어감.
+      var key = getCookie("key");
+      $("#email").val(key); 
+       
+      if($("#email").val() != ""){ // 그 전에 emil를 저장해서 처음 페이지 로딩 시, 입력 칸에 저장된 ID가 표시된 상태라면,
+          $("#emailSaved").attr("checked", true); // email 저장하기를 체크 상태로 두기.
+      }
+       
+      $("#emailSaved").change(function(){ // 체크박스에 변화가 있다면,
+          if($("#emailSaved").is(":checked")){ // email 저장하기 체크했을 때,
+              setCookie("key", $("#email").val(), 7); // 7일 동안 쿠키 보관
+          }else{ // ID 저장하기 체크 해제 시,
+              deleteCookie("key");
+          }
+      });
+       
+	  // email 저장하기를 체크한 상태에서 email를 입력하는 경우, 이럴 때도 쿠키 저장.
+	  $("#email").keyup(function(){ // email 입력 칸에 email를 입력할 때,
+	      if($("#emailSaved").is(":checked")){ // email 저장하기를 체크한 상태라면,
+	          setCookie("key", $("#email").val(), 7); // 7일 동안 쿠키 보관
+	      }
+	  });
+      
     });
+    
+    function setCookie(cookieName, value, exdays){
+	      var exdate = new Date();
+	      exdate.setDate(exdate.getDate() + exdays);
+	      var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
+	      document.cookie = cookieName + "=" + cookieValue;
+	}
+	   
+	function deleteCookie(cookieName){
+	      var expireDate = new Date();
+	      expireDate.setDate(expireDate.getDate() - 1);
+	      document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
+	}
+	   
+	function getCookie(cookieName) {
+	      cookieName = cookieName + '=';
+	      var cookieData = document.cookie;
+	      var start = cookieData.indexOf(cookieName);
+	      var cookieValue = '';
+	      if(start != -1){
+	          start += cookieName.length;
+	          var end = cookieData.indexOf(';', start);
+	          if(end == -1)end = cookieData.length;
+	          cookieValue = cookieData.substring(start, end);
+	      }
+    	  return unescape(cookieValue);
+	}
 
   </script>
+  
 </body>
 </html>
