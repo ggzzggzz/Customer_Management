@@ -276,7 +276,7 @@
             <li><input type="text" class="input calender" id="sDatePic" placeholder="시작일" name="startDate"></li>
             <li>~</li>
             <li><input type="text" class="input calender" id="eDatePic" placeholder="종료일" name="endDate"></li>
-            <li><input type="text" class="input" placeholder="검색어" value="${hashMap.get('searchKeyword') }" name="searchKeyword"></li>
+            <li><input type="text" class="input" placeholder="검색어(고객명/담당자명/담당자연락처/담당자이메일)" value="${hashMap.get('searchKeyword') }" name="searchKeyword"></li>
             <li>
               <button class="newbtnss bg1" type="submit">검색</button>
             </li>
@@ -361,23 +361,30 @@
   <script>
     $(document).ready(function () {
       $('#examples').DataTable({
-        "paging": true,
-        "searching": false,
-        "info": true
+         "paging": true,
+         "searching": false,
+         "info": true,
+         "ordering" : true,
+         "order" : [9,"desc"],
+         "lengthMenu" : [5,10,20,100],
+         "processing" : true,
+         "responsive" : true
       });
       $('#example2').DataTable({
-        "paging": false,
-        "searching": false,
-        "info": false,
+         "paging": true,
+         "searching": false,
+         "info": true
       });
-    });
-    $(document).ready(function () {
-      
+      var tr;
       $('.newcode').click(function () {
         $('#newcode').addClass('act');
       });
       $('.recode').click(function () {
-        $('#recode').addClass('act');
+    	if(tr == null){
+    		alert('수정할 행을 선택하세요!');
+    	} else{
+    		$('#recode').addClass('act');	
+    	}
       });
       
       $('.pop-x-btn, .modalclose').click(function() {
@@ -388,6 +395,43 @@
               //tmp.removeClass('act');
           }
       });
+   	  // 테이블의 Row 클릭시 값 가져오기
+  	  $("#examples tbody").on('click', 'tr', function(){ 	
+
+  		var str = ""
+  		var tdArr = new Array();	// 배열 선언
+  		
+  		// 현재 클릭된 Row(<tr>)
+  		tr = $(this);
+  		var td = tr.children();
+  		
+  		// tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
+  		console.log("클릭한 Row의 모든 데이터 : "+tr.text());
+  		
+  		// 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
+  		td.each(function(i){
+  			tdArr.push(td.eq(i).text());
+  		});
+  		
+  		console.log("배열에 담긴 값 : "+tdArr);
+  		
+  		// td.eq(index)를 통해 값을 가져올 수도 있다.
+  		var customer_code = td.eq(1).text();
+  		var customer_name = td.eq(2).text();
+  		var manager_name = td.eq(3).text();
+  		var manager_phone = td.eq(4).text();
+  		var manager_email = td.eq(5).text();
+  		var note = td.eq(6).text();
+  		var use_yn = td.eq(7).text();
+  		
+  		$("#customer_code-result").val(customer_code);
+  		$("#customer_name-result").val(customer_name);
+  		$("#manager_name-result").val(manager_name);
+  		$("#manager_phone-result").val(manager_phone);
+  		$("#manager_email-result").val(manager_email);
+  		$("#note-result").val(note);
+  		$("#use_yn-result").val(use_yn);
+  	  });
     });
 
     $(function () {
@@ -408,45 +452,6 @@
     	}
     });
 
-  </script>
-  <script>
-	// 테이블의 Row 클릭시 값 가져오기
-	$("#examples tr").click(function(){ 	
-
-		var str = ""
-		var tdArr = new Array();	// 배열 선언
-		
-		// 현재 클릭된 Row(<tr>)
-		var tr = $(this);
-		var td = tr.children();
-		
-		// tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
-		console.log("클릭한 Row의 모든 데이터 : "+tr.text());
-		
-		// 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
-		td.each(function(i){
-			tdArr.push(td.eq(i).text());
-		});
-		
-		console.log("배열에 담긴 값 : "+tdArr);
-		
-		// td.eq(index)를 통해 값을 가져올 수도 있다.
-		var customer_code = td.eq(1).text();
-		var customer_name = td.eq(2).text();
-		var manager_name = td.eq(3).text();
-		var manager_phone = td.eq(4).text();
-		var manager_email = td.eq(5).text();
-		var note = td.eq(6).text();
-		var use_yn = td.eq(7).text();
-		
-		$("#customer_code-result").val(customer_code);
-		$("#customer_name-result").val(customer_name);
-		$("#manager_name-result").val(manager_name);
-		$("#manager_phone-result").val(manager_phone);
-		$("#manager_email-result").val(manager_email);
-		$("#note-result").val(note);
-		$("#use_yn-result").val(use_yn);
-	});
   </script>
 </body>
 </html>

@@ -33,9 +33,6 @@
 		INSERT INTO tbl_customer(Customer_Name, Manager_Name, Manager_Phone, Manager_Email, Note, Use_YN, Insert_Code)
 		VALUES(#{Customer_Name}, #{Manager_Name}, #{Manager_Phone}, #{Manager_Email}, #{Note}, #{Use_YN}, #{Insert_Code})
 	</insert>
-	<select id="infoAdmin" parameterType="kr.co.infracube.dto.AdminDto" resultType="kr.co.infracube.dto.AdminDto">
-		SELECT Email, AName, Note, Use_YN FROM tbl_admin WHERE Email = #{Email}
-	</select>
 	<update id="updateAdmin" parameterType="kr.co.infracube.dto.AdminDto">
 		UPDATE tbl_admin
 		SET 
@@ -58,6 +55,7 @@
 			Note = #{Note},
 			Use_YN = #{Use_YN},
 			Update_Code = #{Update_Code}
+			Update_Date = current_timestamp()
 		WHERE
 			Customer_Code = #{Customer_Code}
 	</update>

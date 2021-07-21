@@ -58,7 +58,7 @@ public class MainController {
 		}
 		
 		HttpSession session = request.getSession();
-		session.setAttribute("sessionId", email);
+		session.setAttribute("Email", email);
 		session.setAttribute("OTP", String.format("%06d", number));
 
 		return passwordReset(request);
@@ -103,7 +103,7 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("apass_reset");
 		HttpSession session = request.getSession();
-		mv.addObject("sessionId", session.getAttribute("sessionId"));
+		mv.addObject("Email", session.getAttribute("Email"));
 		mv.addObject("OTP", session.getAttribute("OTP"));
 		return mv;
 	}
@@ -179,18 +179,22 @@ public class MainController {
 	
 	//insertCustomer.do
 	@RequestMapping("/insertCustomer.do")
-	public ModelAndView insertCustomer(CustomerDto dto, HttpServletRequest request) throws Exception{
+	public void insertCustomer(CustomerDto dto, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		mainservice.insertCustomer(dto);
 		System.out.println(dto);
-		return customer(null, request);
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.println("<script> alert('등록완료'); location.href='customer.do'; </script>");
 	}
 	
 	//updateCustomer.do
 	@RequestMapping("/updateCustomer.do")
-	public ModelAndView updateCustomer(CustomerDto dto, HttpServletRequest request) throws Exception{
+	public void updateCustomer(CustomerDto dto, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		mainservice.updateCustomer(dto);
 		System.out.println(dto);
-		return customer(null, request);
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.println("<script> alert('수정완료'); location.href='customer.do'; </script>");
 	}
 	
 	//납품

@@ -35,9 +35,6 @@ public class MainService {
 	public int insertCustomer(CustomerDto dto) throws Exception{
 		return mainmapper.insertCustomer(dto);
 	}
-	public AdminDto infoAdmin(AdminDto admin) throws Exception{
-		return mainmapper.infoAdmin(admin);
-	}
 	public int updateAdmin(AdminDto dto) throws Exception{
 		return mainmapper.updateAdmin(dto);
 	}

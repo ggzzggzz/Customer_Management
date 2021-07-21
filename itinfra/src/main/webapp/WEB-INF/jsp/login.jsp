@@ -102,7 +102,7 @@
       });
 
       $('.info_a1').click(function () {
-    	  if($('.login_input').val() == null || $('.login_input').val() == '') {
+    	  if($('#email').val() == null || $('#email').val() == '' || $('#password').val() == null || $('#password').val() == '') {
     		$('#info_a1').addClass('act');
     	  } else {
     		  $('.info_a1').attr("href", "sendmail.do?email=" + $('#email').val());

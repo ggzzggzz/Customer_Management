@@ -215,7 +215,7 @@
             <div class="sub_title">관리자등록</div>
             <button class="newbtn bg1 newcode" type="button">등록</button>
             <button class="newbtn bg1 recode" type="button">수정</button>
-            <button class="newbtn bg1 " type="button">엑셀</button>
+            <button class="newbtn bg1 " type="submit">엑셀</button>
           </section>
         </div>
       </section>
@@ -293,21 +293,29 @@
       $('#examples').DataTable({
         "paging": true,
         "searching": false,
-        "info": true
+        "info": true,
+        "ordering" : true,
+        "lengthMenu" : [5,10,20,100],
+        "processing" : true,
+        "responsive" : true
       });
       $('#example2').DataTable({
-        "paging": false,
+        "paging": true,
         "searching": false,
-        "info": false,
+        "info": true
       });
     });
     $(document).ready(function () {
-      
+      var tr;
       $('.newcode').click(function () {
         $('#newcode').addClass('act');
       });
       $('.recode').click(function () {
-        $('#recode').addClass('act');
+    	if(tr == null){
+      		alert('수정할 행을 선택하세요!');
+      	} else{
+      		$('#recode').addClass('act');	
+      	}
       });
       
       $('.pop-x-btn, .modalclose').click(function() {
@@ -323,42 +331,40 @@
      	 if($('#searchKeyword').val() != null && $('#searchKeyword').val() != '' ){
      	 	$('#search').attr("action", "systemset.do?searchKeyword=" + $('#searchKeyword').val()); 
      	 }
-       });
+      });
+      // 테이블의 Row 클릭시 값 가져오기
+  	  $("#examples tbody").on('click', 'tr', function(){ 	
+
+  		var str = ""
+  		var tdArr = new Array();	// 배열 선언
+  		
+  		// 현재 클릭된 Row(<tr>)
+  		tr = $(this);
+  		var td = tr.children();
+  		
+  		// tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
+  		console.log("클릭한 Row의 모든 데이터 : "+tr.text());
+  		
+  		// 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
+  		td.each(function(i){
+  			tdArr.push(td.eq(i).text());
+  		});
+  		
+  		console.log("배열에 담긴 값 : "+tdArr);
+  		
+  		// td.eq(index)를 통해 값을 가져올 수도 있다.
+  		var email = td.eq(1).text();
+  		var admin_name = td.eq(2).text();
+  		var note = td.eq(3).text();
+  		var use_yn = td.eq(4).text();
+  		
+  		$("#email-result").val(email);
+  		$("#aname-result").val(admin_name);
+  		$("#note-result").val(note);
+  		$("#use_yn-result").val(use_yn);
+  	  });
     });
 
-  </script>
-  <script>
-	// 테이블의 Row 클릭시 값 가져오기
-	$("#examples tr").click(function(){ 	
-
-		var str = ""
-		var tdArr = new Array();	// 배열 선언
-		
-		// 현재 클릭된 Row(<tr>)
-		var tr = $(this);
-		var td = tr.children();
-		
-		// tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
-		console.log("클릭한 Row의 모든 데이터 : "+tr.text());
-		
-		// 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
-		td.each(function(i){
-			tdArr.push(td.eq(i).text());
-		});
-		
-		console.log("배열에 담긴 값 : "+tdArr);
-		
-		// td.eq(index)를 통해 값을 가져올 수도 있다.
-		var email = td.eq(1).text();
-		var admin_name = td.eq(2).text();
-		var note = td.eq(3).text();
-		var use_yn = td.eq(4).text();
-		
-		$("#email-result").val(email);
-		$("#aname-result").val(admin_name);
-		$("#note-result").val(note);
-		$("#use_yn-result").val(use_yn);
-	});
   </script>
 </body>
 </html>

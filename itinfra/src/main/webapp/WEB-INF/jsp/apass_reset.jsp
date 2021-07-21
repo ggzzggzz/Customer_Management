@@ -62,7 +62,7 @@
             <div class="text-center opacity-50 font-italic">IT-Infra Management System</div>
           </div>
           <ul>
-            <li><input type="text" class="login_input" value="${sessionId }"placeholder="이메일" name="Email" readonly></li>
+            <li><input type="text" class="login_input" value="${Email }"placeholder="이메일" name="Email" readonly></li>
             <li><input id="OTP" type="text" class="login_input" placeholder="OTP 숫자 6자리"></li>
             <li><div id="timer" class="small text-right text-danger"><h5>(3:00)</h5></div></li>
             
