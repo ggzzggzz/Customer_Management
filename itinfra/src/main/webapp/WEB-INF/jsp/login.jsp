@@ -119,6 +119,10 @@
       });
      
       $('.login_btn').click(function () {
+    	  if($('.login_input').val() == null || $('.login_input').val() == ''){
+    		  alert('이메일과 비밀번호가 입력되었는지 확인해주세요.');
+    		  return false;
+    	  }
     	  var email_rule =  /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     	  if (!email_rule.test($('#email').val())){
     		  alert("이메일을 형식에 맞게 입력해주세요.(예시: test@infracube.co.kr)");

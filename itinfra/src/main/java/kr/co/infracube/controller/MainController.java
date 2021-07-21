@@ -1,11 +1,11 @@
 package kr.co.infracube.controller;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +17,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.infracube.dto.AdminDto;
@@ -57,8 +56,12 @@ public class MainController {
 			System.out.println(e);
 			return login(request);
 		}
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("sessionId", email);
+		session.setAttribute("OTP", String.format("%06d", number));
 
-		return passwordReset();
+		return passwordReset(request);
 	}
 	
 	//로그인
@@ -70,11 +73,16 @@ public class MainController {
 	}
 	
 	@RequestMapping("/processLogin.do")
-	public ModelAndView processLogin(AdminDto admin, HttpServletRequest request) throws Exception{
+	public ModelAndView processLogin(AdminDto admin, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		AdminDto dto = mainservice.processLogin(admin);
 		System.out.println(dto);
-		if(dto == null)
+		if(dto == null) {
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script> alert('이메일과 비밀번호가 맞는지 확인해주세요.'); </script>");
+			out.flush();
 			return login(request);
+		}
 		HttpSession session = request.getSession();
 		session.setAttribute("sessionId", dto.getEmail());
 		session.setAttribute("sessionName", dto.getAName());
@@ -91,10 +99,23 @@ public class MainController {
 	
 	//비밀번호 재설정
 	@RequestMapping("/passwordReset.do")
-	public ModelAndView passwordReset() {
+	public ModelAndView passwordReset(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("apass_reset");
+		HttpSession session = request.getSession();
+		mv.addObject("sessionId", session.getAttribute("sessionId"));
+		mv.addObject("OTP", session.getAttribute("OTP"));
 		return mv;
+	}
+	
+	//passwordChange.do
+	@RequestMapping("/passwordChange.do")
+	public ModelAndView passwordChange(AdminDto dto, HttpServletRequest request) throws Exception{
+		mainservice.passwordChange(dto);
+		HttpSession session = request.getSession();
+		session.invalidate();
+		System.out.println(dto);
+		return login(request);
 	}
 	
 	//그룹코드
@@ -124,14 +145,34 @@ public class MainController {
 	
 	//고객
 	@RequestMapping("/customer.do")
-	public ModelAndView customer(HttpServletRequest request) throws Exception{
+	public ModelAndView customer(@RequestParam HashMap<String, String> paramMap, HttpServletRequest request) throws Exception{	
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("customer");
 		HttpSession session = request.getSession();
-		List<CustomerDto> list = mainservice.listCustomers(null);
+		System.out.println(paramMap);
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		if(paramMap.containsKey("startDate")) {
+			hashMap.put("startDate", paramMap.get("startDate"));
+		} else {
+			hashMap.put("startDate", "");
+		}
+		if(paramMap.containsKey("endDate")) {
+			hashMap.put("endDate", paramMap.get("endDate"));
+		} else {
+			hashMap.put("endDate", "");
+		}
+		if(paramMap.containsKey("searchKeyword")) {
+			hashMap.put("searchKeyword", paramMap.get("searchKeyword"));
+		} else {
+			hashMap.put("searchKeyword", "");
+		}
+		System.out.println(hashMap);
+		List<CustomerDto> list = mainservice.listCustomers(hashMap);
 		System.out.println(list);
 		mv.addObject("sessionId", session.getAttribute("sessionId"));
 		mv.addObject("sessionName", session.getAttribute("sessionName"));
+		mv.addObject("paramMap", paramMap);
+		mv.addObject("hashMap", hashMap);
 		mv.addObject("list", list);
 		return mv;
 	}
@@ -141,7 +182,7 @@ public class MainController {
 	public ModelAndView insertCustomer(CustomerDto dto, HttpServletRequest request) throws Exception{
 		mainservice.insertCustomer(dto);
 		System.out.println(dto);
-		return customer(request);
+		return customer(null, request);
 	}
 	
 	//updateCustomer.do
@@ -149,7 +190,7 @@ public class MainController {
 	public ModelAndView updateCustomer(CustomerDto dto, HttpServletRequest request) throws Exception{
 		mainservice.updateCustomer(dto);
 		System.out.println(dto);
-		return customer(request);
+		return customer(null, request);
 	}
 	
 	//납품
@@ -183,24 +224,37 @@ public class MainController {
 	
 	//관리자
 	@RequestMapping("/systemset.do")
-	public ModelAndView systemset(HttpServletRequest request) throws Exception{
+	public ModelAndView systemset(@RequestParam(value="searchKeyword", defaultValue="") String searchKeyword, HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView();
+		AdminDto dto = new AdminDto();
+		dto.setAName(searchKeyword);
 		mv.setViewName("systemset");
 		HttpSession session = request.getSession();
-		List<AdminDto> list = mainservice.listAdmins(null);
+		List<AdminDto> list = mainservice.listAdmins(dto);
+		System.out.println(searchKeyword);
 		System.out.println(list);
 		mv.addObject("sessionId", session.getAttribute("sessionId"));
 		mv.addObject("sessionName", session.getAttribute("sessionName"));
+		mv.addObject("searchKeyword", searchKeyword);
 		mv.addObject("list", list);
 		return mv;
 	}
 	
 	//insertAdmin.do
 	@RequestMapping("/insertAdmin.do")
-	public ModelAndView insertAdmin(AdminDto dto, HttpServletRequest request) throws Exception{
-		mainservice.insertAdmin(dto);
+	public ModelAndView insertAdmin(AdminDto dto, HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try{
+			System.out.println(dto);
+			mainservice.insertAdmin(dto);
+		} catch (Exception e){
+			e.printStackTrace();
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script> alert('이메일이 이미 존재합니다.'); </script>");
+			out.flush();
+		}
 		System.out.println(dto);
-		return systemset(request);
+		return systemset("", request);
 	}
 	
 	//updateAdmin.do
@@ -208,6 +262,6 @@ public class MainController {
 	public ModelAndView updateAdmin(AdminDto dto, HttpServletRequest request) throws Exception{
 		mainservice.updateAdmin(dto);
 		System.out.println(dto.getEmail());
-		return systemset(request);
+		return systemset("", request);
 	}
 }

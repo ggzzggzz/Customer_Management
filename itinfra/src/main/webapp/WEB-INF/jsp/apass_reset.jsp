@@ -23,7 +23,8 @@
   <link rel="stylesheet" href="dist/css/style_new.css">
   <title>golfzone::ZOIMARU</title>
 </head>
-<body>
+<body onload="init()">
+<form class="password-change" action="passwordChange.do" method="post">
 	<!-- 비밀번호 변경 alert:Start -->
   <div class="modalz" id="info_a1">
     <div class="modalz_body small">
@@ -37,7 +38,7 @@
         </div>
       </div>
       <div class="modalz_foot">
-        <a href="login.do" class="newbtns bg1">확인</a>
+        <button class="newbtns bg1" type="submit">확인</button>
         <a href="#" class="newbtns modalclose">취소</a>
       </div>
     </div>
@@ -61,12 +62,12 @@
             <div class="text-center opacity-50 font-italic">IT-Infra Management System</div>
           </div>
           <ul>
-            <li><input type="text" class="login_input" placeholder="이메일"></li>
-            <li><input type="text" class="login_input" placeholder="OTP 숫자 6자리"></li>
-            <li><div class="small text-right text-danger"><h5>(3:00)</h5></div></li>
+            <li><input type="text" class="login_input" value="${sessionId }"placeholder="이메일" name="Email" readonly></li>
+            <li><input id="OTP" type="text" class="login_input" placeholder="OTP 숫자 6자리"></li>
+            <li><div id="timer" class="small text-right text-danger"><h5>(3:00)</h5></div></li>
             
-            <li><input type="password" class="login_input" placeholder="비밀번호"></li>
-            <li><input type="password" class="login_input" placeholder="비밀번호확인"></li>
+            <li><input id="password" type="password" class="login_input" placeholder="비밀번호" name="Password"></li>
+            <li><input id="password-confirm" type="password" class="login_input" placeholder="비밀번호확인"></li>
             <li class="line"></li>
             <li class="logbtn">
               <!-- <button class="newbtn bg1 info_a1 login_btn bg1" onclick="location.href='login.html'">확인</button> -->
@@ -74,9 +75,11 @@
             </li>
           </ul>
         </div>
+        <input type="hidden" id="OTP-Value" value="${OTP }" />
       </div>
     </div>
   </div>
+</form>
 
   <!-- Main Scripts -->
   <script src="dist/js/jquery.min.js"></script>
@@ -98,7 +101,15 @@
       });
 
       $('.info_a1').click(function () {
-        $('#info_a1').addClass('act');
+    	if($('#OTP').val() != $('#OTP-Value').val()){
+    		alert("OTP가 다릅니다. 다시 확인 후 입력해주세요.");
+    		return false;
+    	}
+    	if($('#password').val() != $('#password-confirm').val()){
+    		alert("비밀번호가 다릅니다. 비밀번호를 똑같이 입력해주세요.");
+    		return false;
+    	}
+       	$('#info_a1').addClass('act');
       });
       
       $('.pop-x-btn, .modalclose').click(function() {
@@ -112,5 +123,51 @@
     });
 
   </script>
+  <script>
+
+var timer = null;
+var isRunning = false;
+function init(){
+    var display = $('.small');
+    var leftSec = 180;
+    // 남은 시간
+    // 이미 타이머가 작동중이면 중지
+    if (isRunning){
+    	clearInterval(timer);
+    	display.html("");
+    	startTimer(leftSec, display);
+    }else{
+    	startTimer(leftSec, display);
+    		
+    }
+
+}
+
+    
+function startTimer(count, display) {
+            
+    		var minutes, seconds;
+            timer = setInterval(function () {
+            minutes = parseInt(count / 60, 10);
+            seconds = parseInt(count % 60, 10);
+     
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+     
+            display.html("<h5>(" + minutes + ":" + seconds + ")</h5>");
+     
+            // 타이머 끝
+            if (--count < 0) {
+    	     clearInterval(timer);
+    	     alert("시간초과");
+    	     isRunning = false;
+    	     window.location.href = "login.do"
+            }
+        }, 1000);
+             isRunning = true;
+}
+
+
+</script>
 </body>
 </html>
